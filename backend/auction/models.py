@@ -21,7 +21,9 @@ class Auction(models.Model):
         max_digits=14,
         decimal_places=2,
         default_currency='USD',
-        verbose_name='End price'
+        verbose_name='End price',
+        null=True,
+        blank=True
     )
     # % of previous price (usually = 5-15%)
     price_step = models.IntegerField(
@@ -33,11 +35,11 @@ class Auction(models.Model):
         choices=AuctionStatus.choices(),
         verbose_name='Auction status'
     )
-    opening_date = models.DateField(
+    opening_date = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Opening date'
     )
-    closing_date = models.DateField(verbose_name='Closing date')
+    closing_date = models.DateTimeField(verbose_name='Closing date')
 
     # Dutch
     # minimum amount you are willing to sell for
@@ -53,4 +55,4 @@ class Auction(models.Model):
     frequency = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.type
+        return f'{self.type}: start {self.opening_date.strftime("%Y-%m-%d %H:%M:%S")}'
