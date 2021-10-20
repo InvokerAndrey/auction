@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# static images
+/backend/static/images/*.jpeg
+/backend/static/images/*.jpg
+/backend/static/images/*.png

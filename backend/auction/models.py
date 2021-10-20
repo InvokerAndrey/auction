@@ -1,14 +1,14 @@
 from django.db import models
 from djmoney.models.fields import MoneyField
 
-from .enums import AuctionType, AuctionStatus
+from .enums import AuctionTypeEnum, AuctionStatusEnum
 
 
 class Auction(models.Model):
     # Common (English and Dutch)
     type = models.CharField(
         max_length=255,
-        choices=AuctionType.choices(),
+        choices=AuctionTypeEnum.choices(),
         verbose_name='Auction type'
     )
     start_price = MoneyField(
@@ -32,7 +32,7 @@ class Auction(models.Model):
     )
     auction_status = models.CharField(
         max_length=255,
-        choices=AuctionStatus.choices(),
+        choices=AuctionStatusEnum.choices(),
         verbose_name='Auction status'
     )
     opening_date = models.DateTimeField(

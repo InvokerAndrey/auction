@@ -279,3 +279,12 @@ pip-selfcheck.json
 # poetry
 poetry.lock
 pyproject.toml
+
+# static images
+/backend/static/images/*.png
+/backend/static/images/*.jpg
+/backend/static/images/*.jpeg
+
+/static/images/*.png
+/static/images/*.jpg
+/static/images/*.jpeg
