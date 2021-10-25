@@ -24,12 +24,12 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # nano .bashrc on Ubuntu
-SECRET_KEY = os.environ.get('AUCTION_DJANGO_SECRET_KEY')
+SECRET_KEY = '^8m=8kqnvlu^0_e1%0a%(7(ksvf_q6rtxvq8$x$2er-v=2er-v=&k%(v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'lot.apps.LotConfig',
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
+    'offer.apps.OfferConfig',
 ]
 
 MIDDLEWARE = [
@@ -91,14 +92,25 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('AUCTION_DB_NAME'),
+#         'USER': os.environ.get('AUCTION_DB_USER'),
+#         'PASSWORD': os.environ.get('AUCTION_DB_PASSWORD'),
+#         'HOST': 'localhost',
+#         'PORT': '5432'
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('AUCTION_DB_NAME'),
-        'USER': os.environ.get('AUCTION_DB_USER'),
-        'PASSWORD': os.environ.get('AUCTION_DB_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5432'
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -167,8 +179,8 @@ from datetime import timedelta
 ...
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
@@ -195,3 +207,10 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+# Celery
+
+CELERY_TIMEZONE = 'Europe/London'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = 'redis://redis:6379'

@@ -26,7 +26,6 @@ class BaseListView(APIView):
         return paginator.get_paginated_response(serializer.data)
 
 
-
 class BaseDetailView(APIView):
     model = None
     model_serializer = None

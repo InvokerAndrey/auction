@@ -56,3 +56,8 @@ class Auction(models.Model):
 
     def __str__(self):
         return f'{self.type}: start {self.opening_date.strftime("%Y-%m-%d %H:%M:%S")}'
+
+    @staticmethod
+    def change_status(auction, status):
+        auction.auction_status = status
+        auction.save(update_fields=['auction_status'])

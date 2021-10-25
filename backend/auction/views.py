@@ -1,4 +1,6 @@
 from django.db.models import F, Q
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Auction
@@ -6,6 +8,7 @@ from .serializers import AuctionSerializer
 from .enums import AuctionStatusEnum, AuctionTypeEnum
 from core.views import BaseDetailView
 from core.views import Pagination
+from .tasks import change_auction_status
 
 
 class AuctionListView(APIView):
@@ -33,3 +36,12 @@ class AuctionListView(APIView):
 class AuctionDetailView(BaseDetailView):
     model = Auction
     model_serializer = AuctionSerializer
+
+
+class ChangeStatus(APIView):
+    def put(self, request, pk, format=None):
+        status = request.query_params.get('auction_status')
+        if status:
+            change_auction_status.delay(pk=pk, auction_status=status)
+            return Response('Status will be changed')
+        return Response('Status will not be changed')
