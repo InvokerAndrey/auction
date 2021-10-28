@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'djmoney',
     'rest_framework_simplejwt',
+    'django_celery_beat',
 
     'auction.apps.AuctionConfig',
     'item.apps.ItemConfig',
@@ -147,6 +148,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -179,8 +182,8 @@ from datetime import timedelta
 ...
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=60),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
@@ -209,8 +212,23 @@ SIMPLE_JWT = {
 }
 
 # Celery
+from datetime import timedelta
 
 CELERY_TIMEZONE = 'Europe/London'
+
 CELERY_TASK_TRACK_STARTED = True
+
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
 CELERY_BROKER_URL = 'redis://redis:6379'
+
+CELERY_ACCEPT_CONTENT = ['json']
+
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULE = {
+    "slow_down": {
+        "task": "auction.tasks.close_auction",
+        "schedule": timedelta(seconds=1),
+    }
+}

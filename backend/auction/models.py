@@ -1,14 +1,16 @@
+from datetime import datetime
 from django.db import models
 from djmoney.models.fields import MoneyField
+from django.conf import settings
 
 from .enums import AuctionTypeEnum, AuctionStatusEnum
 
 
 class Auction(models.Model):
     # Common (English and Dutch)
-    type = models.CharField(
-        max_length=255,
+    type = models.IntegerField(
         choices=AuctionTypeEnum.choices(),
+        default=AuctionTypeEnum.ENGLISH,
         verbose_name='Auction type'
     )
     start_price = MoneyField(
@@ -30,9 +32,9 @@ class Auction(models.Model):
         default=5,
         verbose_name='Price step'
     )
-    auction_status = models.CharField(
-        max_length=255,
+    auction_status = models.IntegerField(
         choices=AuctionStatusEnum.choices(),
+        default=AuctionStatusEnum.PENDING,
         verbose_name='Auction status'
     )
     opening_date = models.DateTimeField(
@@ -55,9 +57,4 @@ class Auction(models.Model):
     frequency = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f'{self.type}: start {self.opening_date.strftime("%Y-%m-%d %H:%M:%S")}'
-
-    @staticmethod
-    def change_status(auction, status):
-        auction.auction_status = status
-        auction.save(update_fields=['auction_status'])
+        return f'{self.type}: start {self.opening_date.strftime(settings.DATETIME_FORMAT)}'

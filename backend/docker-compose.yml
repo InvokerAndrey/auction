@@ -17,7 +17,7 @@ services:
     image: redis
     ports:
       - "6379:6379"
-  
+
   web:
     build:
       context: .
@@ -30,4 +30,16 @@ services:
     depends_on:
      - db
      - redis
+    
+    stdin_open: true
+    tty: true
 
+  celery:
+    build:
+      context: .
+
+    command: celery -A backend worker -B -l INFO
+    
+    depends_on:
+     - db
+     - redis

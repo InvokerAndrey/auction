@@ -6,10 +6,15 @@ import {
  } from '../constants/auctionConstants'
 
 
+
+
+
 export const listAuctions = (params={}) => async (dispatch) => {
     try{
         dispatch({type: AUCTION_LIST_REQUEST})
+        
         const {data} = await axios.get('/api/auction/list/', params)
+
         dispatch({
             type: AUCTION_LIST_SUCCESS,
             payload: data,

@@ -7,7 +7,7 @@ from . import views
 urlpatterns = [
     path('list/', views.AuctionListView.as_view(), name='auction-list'),
     path('<int:pk>/', views.AuctionDetailView.as_view(), name='auction-detail'),
-    path('<int:pk>/change-status/', views.ChangeStatus.as_view(), name='auction-change-status'),
+    path('<int:pk>/make-offer/', views.MakeOffer.as_view(), name='lot-detail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

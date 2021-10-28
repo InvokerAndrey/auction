@@ -4,15 +4,15 @@ import enum
 class BaseEnum(enum.Enum):
     @classmethod
     def choices(cls):
-        return tuple((type.name, type.value) for type in cls)
+        return tuple((type.value, type.name) for type in cls)
 
 
 class AuctionTypeEnum(BaseEnum):
-    ENGLISH = 'ENGLISH'
-    DUTCH = 'DUTCH'
+    ENGLISH = 1
+    DUTCH = 2
 
 
 class AuctionStatusEnum(BaseEnum):
-    PENDING = 'PENDING'
-    IN_PROGRESS = 'IN_PROGRESS'
-    CLOSED = 'CLOSED'
+    PENDING = 1
+    IN_PROGRESS = 2
+    CLOSED = 3

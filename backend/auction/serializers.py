@@ -1,23 +1,17 @@
 from rest_framework import serializers
+from django.conf import settings
 
 from .models import Auction
 from lot.serializers import LotSerializer
 
 
+class BaseAuctionSerializer(serializers.ModelSerializer): pass
+
+
 class AuctionSerializer(serializers.ModelSerializer):
-    lot = serializers.SerializerMethodField(read_only=True)
-    opening_date = serializers.SerializerMethodField(read_only=True)
-    closing_date = serializers.SerializerMethodField(read_only=True)
-
-    def get_lot(self, obj):
-        serializer = LotSerializer(obj.lot, many=False)
-        return serializer.data
-
-    def get_opening_date(self, obj):
-        return obj.opening_date.strftime("%Y-%m-%d %H:%M:%S")
-
-    def get_closing_date(self, obj):
-        return obj.closing_date.strftime("%Y-%m-%d %H:%M:%S")
+    opening_date = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
+    closing_date = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
+    lot = LotSerializer(many=False)
 
     class Meta:
         model = Auction
@@ -34,3 +28,4 @@ class AuctionSerializer(serializers.ModelSerializer):
             'frequency',
             'lot',
         ]
+        

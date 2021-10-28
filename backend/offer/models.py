@@ -2,11 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from djmoney.models.fields import MoneyField
 
-from lot.models import Lot
+from auction.models import Auction
 
 
 class Offer(models.Model):
-    lot = models.ForeignKey(Lot, on_delete=models.CASCADE)
+    auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     price = MoneyField(
         max_digits=14,
@@ -16,7 +16,7 @@ class Offer(models.Model):
         null=True,
         blank=True
     )
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Offer: {self.lot}, {self.user.username}'

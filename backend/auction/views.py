@@ -2,6 +2,7 @@ from django.db.models import F, Q
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 
 from .models import Auction
 from .serializers import AuctionSerializer
@@ -9,6 +10,7 @@ from .enums import AuctionStatusEnum, AuctionTypeEnum
 from core.views import BaseDetailView
 from core.views import Pagination
 from .tasks import change_auction_status
+from offer.serializers import CreateOfferSerializer
 
 
 class AuctionListView(APIView):
@@ -38,10 +40,18 @@ class AuctionDetailView(BaseDetailView):
     model_serializer = AuctionSerializer
 
 
-class ChangeStatus(APIView):
-    def put(self, request, pk, format=None):
-        status = request.query_params.get('auction_status')
-        if status:
-            change_auction_status.delay(pk=pk, auction_status=status)
-            return Response('Status will be changed')
-        return Response('Status will not be changed')
+class MakeOffer(APIView):
+    def post(self, request, pk, format=None):
+        context = {
+            'user': request.user,
+            'auction_pk': pk
+        }
+        offer_serializer = CreateOfferSerializer(data=request.data, context=context)
+        if offer_serializer.is_valid():
+            offer_serializer.save()
+            print('VALIDATED_DATA:', offer_serializer.validated_data)
+            # TODO: validated_data vs data
+            
+            return Response(status=201)
+        else:
+            return Response({'detail': offer_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

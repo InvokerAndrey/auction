@@ -4,3 +4,6 @@ command:
 
 up web:
 	docker-compose up --build web
+
+celery:
+	celery -A backend worker -B -l INFO

@@ -2,11 +2,11 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.decorators import api_view
 
-from .serializers import MyTokenObtainPairSerializer, UserSerializer
+from .serializers import UserTokenObtainPairSerializer, UserSerializer
 
 
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
+class UserTokenObtainPairView(TokenObtainPairView):
+    serializer_class = UserTokenObtainPairSerializer
 
 
 @api_view(['GET'])

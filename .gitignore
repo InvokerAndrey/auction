@@ -276,10 +276,6 @@ pip-selfcheck.json
 **/yarn-debug.log*/**
 **/yarn-error.log*/**
 
-# poetry
-poetry.lock
-pyproject.toml
-
 # static images
 /backend/static/images/*.png
 /backend/static/images/*.jpg

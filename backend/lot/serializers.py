@@ -5,19 +5,15 @@ from item.serializers import ItemSerializer
 
 
 class LotSerializer(serializers.ModelSerializer):
-    item = serializers.SerializerMethodField(read_only=True)
-    auction = serializers.SerializerMethodField(read_only=True)
+    item = ItemSerializer(many=False)
 
-    def get_item(self, obj):
-        return ItemSerializer(obj.item, many=False).data
-
-    def get_auction(self, obj):
-        return {
-            'id': obj.auction.pk,
-            'type': obj.auction.type,
-            'auction_status': obj.auction.auction_status
-        }
+    # def get_auction(self, obj):
+    #     return {
+    #         'id': obj.auction.pk,
+    #         'type': obj.auction.type,
+    #         'auction_status': obj.auction.auction_status
+    #     }
 
     class Meta:
         model = Lot
-        fields = ['id', 'item', 'auction']
+        fields = ['id', 'item']
