@@ -1,0 +1,3 @@
+export const LOT_LIST_REQUEST = 'LOT_LIST_REQUEST'
+export const LOT_LIST_SUCCESS = 'LOT_LIST_SUCCESS'
+export const LOT_LIST_FAIL = 'LOT_LIST_FAIL'
