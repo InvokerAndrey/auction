@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { listAuctions } from '../actions/auctionActions'
+import AuctionService from '../services/AuctionService'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Auction from '../components/Auction'
@@ -10,6 +10,7 @@ import Paginate from '../components/Paginate'
 
 
 function AuctionListScreen() {
+    const auctionService = new AuctionService()
 
     const dispatch = useDispatch()
 
@@ -17,7 +18,7 @@ function AuctionListScreen() {
     const {loading, error, auctions, page, count} = auctionList
 
     useEffect(() => {
-        dispatch(listAuctions())
+        dispatch(auctionService.listAuctions())
     }, [dispatch])
 
     return (

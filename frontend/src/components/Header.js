@@ -2,9 +2,10 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import { logout } from '../actions/userActions'
+import UserService from '../services/UserService'
 
 function Header() {
+    const userService = new UserService()
 
     const dispatch = useDispatch()
 
@@ -12,7 +13,7 @@ function Header() {
     const {userInfo} = userLogin
 
     const logoutHandler = () => {
-        dispatch(logout())
+        dispatch(userService.logout())
     }
 
     return (

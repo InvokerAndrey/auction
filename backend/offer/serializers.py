@@ -1,12 +1,14 @@
-from django.conf import settings
 from django.utils import timezone
 from django.db import transaction
 from rest_framework import serializers
 from djmoney.contrib.django_rest_framework import MoneyField
 
+import datetime
+
 from .models import Offer
 from auction.enums import AuctionStatusEnum
 from auction.models import Auction
+from auction.tasks import close_auction
 
 
 class OfferSerializer(serializers.ModelSerializer):
@@ -21,22 +23,27 @@ class CreateOfferSerializer(serializers.Serializer):
     def validate(self, data):
         timestamp = timezone.now()
         auction = Auction.objects.get(pk=self.context.get('auction_pk'))
-        price_step = auction.start_price.amount * auction.price_step / 100
 
         if not (auction.opening_date < timestamp < auction.closing_date):
             raise serializers.ValidationError('You are too late (or early)')
-        elif auction.end_price.amount > data['price'] or ((data['price'] - price_step) < auction.end_price.amount):
+        elif auction.end_price.amount > data['price'] or ((data['price'] - auction.price_step.amount) < auction.end_price.amount):
             raise serializers.ValidationError('Invalid price')
         elif auction.auction_status != AuctionStatusEnum.IN_PROGRESS.value:
             raise serializers.ValidationError(f"Auction is {auction.auction_status}")
-        else:
-            data['timestamp'] = timestamp
-            data['auction'] = auction
-            return data
+        
+        data['timestamp'] = timestamp
+        time_gap = auction.closing_date - timezone.now()
+        if time_gap < datetime.timedelta(minutes=5):
+            auction.closing_date += datetime.timedelta(minutes=5) - time_gap
+            self.context['extend_time'] = True
+        data['auction'] = auction
+        return data
 
     @transaction.atomic
     def create(self, validated_data):
         validated_data['auction'].end_price = validated_data['price']
         validated_data['auction'].save()
+        if self.context.get('extend_time'):
+            close_auction.apply_async((validated_data['auction'].pk, ), eta=validated_data['auction'].closing_date)
         validated_data['user'] = self.context['user']
         return Offer.objects.create(**validated_data)

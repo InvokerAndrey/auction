@@ -2,10 +2,8 @@ from rest_framework import serializers
 from django.conf import settings
 
 from .models import Auction
+from .tasks import close_auction
 from lot.serializers import LotSerializer
-
-
-class BaseAuctionSerializer(serializers.ModelSerializer): pass
 
 
 class AuctionSerializer(serializers.ModelSerializer):
@@ -28,4 +26,5 @@ class AuctionSerializer(serializers.ModelSerializer):
             'frequency',
             'lot',
         ]
-        
+
+

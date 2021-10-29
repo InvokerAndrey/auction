@@ -1,12 +1,15 @@
 import React from 'react'
 import { Pagination, Button } from 'react-bootstrap'
-import { listItems } from '../actions/itemActions'
-import { listLots } from '../actions/lotActions'
-import { listAuctions } from '../actions/auctionActions'
+import ItemService from '../services/ItemService'
+import LotService from '../services/LotService'
+import AuctionService from '../services/AuctionService'
 import { useDispatch } from 'react-redux'
 
 
 function Paginate({ type, page, count }) {
+    const itemService = new ItemService()
+    const lotService = new LotService()
+    const auctionService = new AuctionService()
 
     const dispatch = useDispatch()
 
@@ -21,11 +24,11 @@ function Paginate({ type, page, count }) {
 
         switch (type) {
             case 'item':
-                dispatch(listItems(params))
+                dispatch(itemService.listItems(params))
             case 'lot':
-                dispatch(listLots(params))
+                dispatch(lotService.listLots(params))
             case 'auction':
-                dispatch(listAuctions(params))
+                dispatch(auctionService.listAuctions(params))
             default: {}
         }
     }

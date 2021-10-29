@@ -15,16 +15,6 @@ function Lot({lot}) {
                         <strong>{lot.item.title}</strong>
                     </Card.Title>
                 </Link>
-
-                <Link to={`/`}>
-                    <Card.Title as="div">
-                        <strong>{lot.auction.type}</strong> auction
-                    </Card.Title>
-                </Link>
-                <Card.Text as="div">
-                    <strong>{lot.auction.auction_status}</strong>
-                </Card.Text>
-
             </Card.Body>
         </Card>
     )

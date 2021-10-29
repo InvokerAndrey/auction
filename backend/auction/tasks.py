@@ -1,39 +1,39 @@
 from celery import shared_task
-
 from django.utils import timezone
-import pickle
 
 from .enums import AuctionStatusEnum
-from . import models
+from .models import Auction
 
 
 @shared_task
-def close_auction():
-    now = timezone.now()
-    print('----------', now)
-    try:
-        with open('auction/dates.pkl', 'rb') as file:
-            dates = pickle.load(file)
-    except FileNotFoundError:
+def start_auction(pk):
+    print('NOW:', timezone.now())
+    print('START_AUCTION TASK')
+    auction = Auction.objects.get(pk=pk)
+    if auction.auction_status != AuctionStatusEnum.PENDING.value:
+        print('AUCTION IS NOT PENDING')
+        return
+    elif (timezone.now() - auction.opening_date).total_seconds() >= 0:
+        auction.auction_status = AuctionStatusEnum.IN_PROGRESS.value
+        auction.save()
+        print('AUCTION STARTED!!!!!!!!!!')
+    else:
+        print('HMM..')
         return
 
-    print(dates)
-
-    for id in list(dates.keys()):
-        if now >= dates[id]:
-            print('CHANGING STATUS')
-            models.Auction.objects.filter(pk=id).update(auction_status=AuctionStatusEnum.CLOSED.value)
-            print('STATUS CHANGED')
-            del dates[id]
-
-    with open('auction/dates.pkl', 'wb') as file:
-        pickle.dump(dates, file)
-
 
 @shared_task
-def change_auction_status(pk, auction_status):
-    try:
-        auction = models.Auction.objects.get(pk=pk)
-        models.Auction.change_status(auction, auction_status)
-    except models.Auction.DoesNotExist:
-        raise models.Auction.DoesNotExist('Invalid auction')
+def close_auction(pk):
+    print('NOW:', timezone.now())
+    print('CLOSE_AUCTION TASK')
+    auction = Auction.objects.get(pk=pk)
+    if auction.auction_status == AuctionStatusEnum.CLOSED.value:
+        print('AUCTION IS ALREADY CLOSED')
+        return
+    elif (timezone.now() - auction.closing_date).total_seconds() >= 0:
+        auction.auction_status = AuctionStatusEnum.CLOSED.value
+        auction.save()
+        print('AUCTION CLOSED!!!!!!!!!!')
+    else:
+        print('NOT YET')
+        return

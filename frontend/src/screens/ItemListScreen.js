@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Row, Col, Button, Pagination } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { listItems } from '../actions/itemActions'
+import ItemService from '../services/ItemService'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Item from '../components/Item'
@@ -10,6 +10,7 @@ import Paginate from '../components/Paginate'
 
 
 function ItemListScreen() {
+    const itemService = new ItemService()
 
     const dispatch = useDispatch()
 
@@ -17,7 +18,7 @@ function ItemListScreen() {
     const {loading, error, items, page, count } = itemList
 
     useEffect(() => {
-        dispatch(listItems())
+        dispatch(itemService.listItems())
     }, [dispatch])
 
     return (

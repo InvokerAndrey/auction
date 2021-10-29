@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.db import models
+from django.utils import timezone
 from djmoney.models.fields import MoneyField
 from django.conf import settings
 
@@ -24,13 +25,14 @@ class Auction(models.Model):
         decimal_places=2,
         default_currency='USD',
         verbose_name='End price',
+    )
+    price_step = MoneyField(
+        max_digits=14,
+        decimal_places=2,
+        default_currency='USD',
+        verbose_name='Price step',
         null=True,
         blank=True
-    )
-    # % of previous price (usually = 5-15%)
-    price_step = models.IntegerField(
-        default=5,
-        verbose_name='Price step'
     )
     auction_status = models.IntegerField(
         choices=AuctionStatusEnum.choices(),
@@ -38,7 +40,7 @@ class Auction(models.Model):
         verbose_name='Auction status'
     )
     opening_date = models.DateTimeField(
-        auto_now_add=True,
+        default=timezone.now,
         verbose_name='Opening date'
     )
     closing_date = models.DateTimeField(verbose_name='Closing date')
@@ -57,4 +59,9 @@ class Auction(models.Model):
     frequency = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f'{self.type}: start {self.opening_date.strftime(settings.DATETIME_FORMAT)}'
+        return f'Auction {self.pk}: {self.type}: start {self.opening_date.strftime(settings.DATETIME_FORMAT)}'
+
+    def save(self, *args, **kwargs):
+        # 10% of start price
+        self.price_step = self.start_price * 0.1
+        super().save(*args, **kwargs)

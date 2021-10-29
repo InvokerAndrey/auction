@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { listLots } from '../actions/lotActions'
+import LotService from '../services/LotService'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Lot from '../components/Lot'
@@ -10,6 +10,7 @@ import Paginate from '../components/Paginate'
 
 
 function LotListScreen() {
+    const lotService = new LotService()
 
     const dispatch = useDispatch()
 
@@ -17,7 +18,7 @@ function LotListScreen() {
     const {loading, error, lots, page, count} = lotList
 
     useEffect(() => {
-        dispatch(listLots())
+        dispatch(lotService.listLots())
     }, [dispatch])
 
     return (

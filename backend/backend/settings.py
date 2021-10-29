@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'djmoney',
     'rest_framework_simplejwt',
-    'django_celery_beat',
 
     'auction.apps.AuctionConfig',
     'item.apps.ItemConfig',
@@ -212,23 +211,10 @@ SIMPLE_JWT = {
 }
 
 # Celery
-from datetime import timedelta
-
 CELERY_TIMEZONE = 'Europe/London'
-
-CELERY_TASK_TRACK_STARTED = True
-
-CELERY_TASK_TIME_LIMIT = 30 * 60
 
 CELERY_BROKER_URL = 'redis://redis:6379'
 
 CELERY_ACCEPT_CONTENT = ['json']
 
 CELERY_TASK_SERIALIZER = 'json'
-
-CELERY_BEAT_SCHEDULE = {
-    "slow_down": {
-        "task": "auction.tasks.close_auction",
-        "schedule": timedelta(seconds=1),
-    }
-}

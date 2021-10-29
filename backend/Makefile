@@ -5,5 +5,8 @@ command:
 up web:
 	docker-compose up --build web
 
+up celery:
+	docker-compose up --build celery
+
 celery:
-	celery -A backend worker -B -l INFO
+	celery -A backend worker -l INFO
