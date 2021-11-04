@@ -3,6 +3,8 @@ from django.db import models
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
 from django.conf import settings
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 from .enums import AuctionTypeEnum, AuctionStatusEnum
 
@@ -65,3 +67,14 @@ class Auction(models.Model):
         # 10% of start price
         self.price_step = self.start_price * 0.1
         super().save(*args, **kwargs)
+
+    def send_updates(self, content):
+        layer = get_channel_layer()
+        async_to_sync(layer.group_send)(
+            'auctions',
+            {
+                'type': 'auctions.alarm', # Name of the method of Consumer that will handle the message
+                'content': content
+            }
+        )
+        print('SENT:', content)

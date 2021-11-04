@@ -9,6 +9,7 @@ import ItemListScreen from './screens/ItemListScreen'
 import LotListScreen from './screens/LotListScreen'
 import AuctionListScreen from './screens/AuctionListScreen'
 import LoginScreen from './screens/LoginScreen'
+import AuctionDetailScreen from './screens/AuctionDetailScreen';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path='/lots' component={LotListScreen} />
           <Route path='/auctions' component={AuctionListScreen} />
           <Route path='/login' component={LoginScreen} />
+          <Route path="/auction/:id" component={AuctionDetailScreen} />
         </Container>
       </main>
       <Footer />

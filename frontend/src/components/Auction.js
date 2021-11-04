@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { STATUS, TYPE, getKeyByValue } from '../constants/auctionConstants'
 
 
 function Auction({auction}) {
@@ -10,13 +11,13 @@ function Auction({auction}) {
                 <Card.Img src={auction.type}/>
             </Link> */}
             <Card.Body>
-                <Link to={`/`}>
+                <Link to={`/auction/${auction.id}`}>
                     <Card.Title as="div">
-                        <strong>{auction.type}</strong> auction
+                        <strong>{getKeyByValue(TYPE, auction.type)}</strong> auction
                     </Card.Title>
                 </Link>
                 <Card.Text as="div">
-                    <strong>{auction.auction_status}</strong> <br/>
+                    <strong>{getKeyByValue(STATUS, auction.auction_status)}</strong> <br/>
                     Start price: ${auction.start_price} <br/>
                     End price: ${auction.end_price} <br/>
                     Opening date: {auction.opening_date} <br/>
