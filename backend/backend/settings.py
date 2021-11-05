@@ -153,15 +153,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
-
-DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 # Static files (CSS, JavaScript, Images)
@@ -186,6 +184,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 1,
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
 }
 
 # SimpleJWT
@@ -225,7 +224,7 @@ SIMPLE_JWT = {
 }
 
 # Celery
-CELERY_TIMEZONE = 'Europe/London'
+CELERY_TIMEZONE = 'Europe/Moscow'
 
 CELERY_BROKER_URL = 'redis://redis:6379'
 

@@ -7,14 +7,14 @@ export const AUCTION_DETAIL_SUCCESS = 'AUCTION_DETAIL_SUCCESS'
 export const AUCTION_DETAIL_FAIL = 'AUCTION_DETAIL_FAIL'
 
 export const STATUS = {
-    PENDING: 1,
-    IN_PROGRESS: 2,
-    CLOSED: 3,
+    1: 'PENDING',
+    2: 'IN PROGRESS',
+    3: 'CLOSED',
 }
 
 export const TYPE = {
-    ENGLISH: 1,
-    DUTCH: 2,
+    1: 'ENGLISH',
+    2: 'DUTCH',
 }
 
 export function getKeyByValue(object, value) {

@@ -16,14 +16,7 @@ def start_auction(pk):
     elif (timezone.now() - auction.opening_date).total_seconds() >= 0:
         auction.auction_status = AuctionStatusEnum.IN_PROGRESS.value
         auction.save()
-        json_response = {
-            'id': auction.id,
-            'auction_status': auction.auction_status,
-            'end_price': str(auction.end_price.amount),
-            'opening_date': str(auction.opening_date),
-            'closing_date': str(auction.closing_date),
-        }
-        auction.send_updates(content=json_response)
+        auction.send_updates()
         print(f'AUCTION {auction.id} STARTED')
     else:
         print('HMM..')
@@ -41,14 +34,7 @@ def close_auction(pk):
     elif (timezone.now() - auction.closing_date).total_seconds() >= 0:
         auction.auction_status = AuctionStatusEnum.CLOSED.value
         auction.save()
-        json_response = {
-            'id': auction.id,
-            'auction_status': auction.auction_status,
-            'end_price': str(auction.end_price.amount),
-            'opening_date': str(auction.opening_date),
-            'closing_date': str(auction.closing_date),
-        }
-        auction.send_updates(content=json_response)
+        auction.send_updates()
         print(f'AUCTION {auction.id} CLOSED')
     else:
         print('NOT YET')

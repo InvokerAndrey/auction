@@ -48,13 +48,5 @@ class CreateOfferSerializer(serializers.Serializer):
         if self.context.get('extend_time'):
             transaction.on_commit(lambda: close_auction.apply_async((validated_data['auction'].pk, ),
                                                                    eta=validated_data['auction'].closing_date))
-
-        json_response = {
-            'id': validated_data['auction'].id,
-            'auction_status': validated_data['auction'].auction_status,
-            'end_price': str(validated_data['auction'].end_price.amount),
-            'opening_date': str(validated_data['auction'].opening_date),
-            'closing_date': str(validated_data['auction'].closing_date),
-        }
-        transaction.on_commit(lambda: Auction().send_updates(content=json_response))
+        transaction.on_commit(lambda: validated_data['auction'].send_updates())
         return offer

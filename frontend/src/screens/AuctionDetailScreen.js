@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Image, Button, ListGroup, Form } from 'react-bootstrap';
+import { Row, Col, Image, Button, ListGroup, InputGroup, Form } from 'react-bootstrap';
 
 import AuctionService from '../services/AuctionService'
 import Loader from '../components/Loader'
@@ -40,8 +40,7 @@ function AuctionDetailScreen({match, history}) {
 
     const auctionService = new AuctionService()
 
-    // Offer price
-    const [price, setPrice] = useState(0)
+
 
     const dispatch = useDispatch()
 
@@ -63,11 +62,15 @@ function AuctionDetailScreen({match, history}) {
         console.log('Making offer')
         dispatch(auctionService.makeOffer(match.params.id, {price}))
     }
-    
+     // Offer price
+    const [price, setPrice] = useState(0)
+    console.log('set price', auction)
+    // const [price, setPrice] = useState("0.10")
+    console.log('price:', newPrice, auction)
     return (
         <div>
             <Button className="btn btn-dark my-3" onClick={() => history.goBack()}>
-                Back
+                <i className="fas fa-arrow-circle-left"></i>
             </Button>
             {loading ? <Loader />
                 : error ? <Message variant='danger'>{error}</Message>
@@ -80,10 +83,10 @@ function AuctionDetailScreen({match, history}) {
                                 <Col md={6}>
                                     <ListGroup variant="flush">
                                         <ListGroup.Item>
-                                            <h3>Type: {getKeyByValue(TYPE, auction.type)}</h3>
+                                            <h3>Type: {TYPE[auction.type]}</h3>
                                         </ListGroup.Item>
                                         <ListGroup.Item>
-                                            <h3>Status: {status ? getKeyByValue(STATUS, status) : getKeyByValue(STATUS, auction.auction_status)}</h3>
+                                            <h3>Status: {status ? STATUS[status] : STATUS[auction.auction_status]}</h3>
                                         </ListGroup.Item>
                                         <ListGroup.Item>
                                             <h3>Start price: ${auction.start_price}</h3>
@@ -108,27 +111,37 @@ function AuctionDetailScreen({match, history}) {
                             </Row>
                             <Row>
                                 <Col md={6}></Col>
-                                <Col>
-                                    <h2>Your offer:</h2>
-                                    <Form.Control
-                                        type='number'
-                                        value={price}
-                                        onChange={(e) => setPrice(e.target.value)}
-                                    >
-                                    </Form.Control>
-                                    <Button
-                                        onClick={makeOfferHandler}
-                                        className='btn-block'
-                                        disabled={
-                                            status ? status !== STATUS.IN_PROGRESS
-                                                : auction.auction_status !== STATUS.IN_PROGRESS
-                                        }
-                                    >
-                                        Submit
-                                    </Button>
+                                <Col className='flex-row'>
+                                    <h3>Your offer:</h3>
                                     {loadingOffer && <Loader />}
                                     {errorOffer && <Message variant='danger'>{errorOffer.non_field_errors}</Message>}
                                     {successOffer && <Message variant='success'>Offer has been made</Message> }
+                                    <Form.Group className='input-group'>
+                                        <InputGroup.Text><i className="fas fa-dollar-sign"></i></InputGroup.Text>
+                                        <Form.Control
+                                            type='number'
+                                            disabled={
+                                                status ? status != getKeyByValue(STATUS, 'IN PROGRESS')
+                                                    : auction.auction_status != getKeyByValue(STATUS, 'IN PROGRESS')
+                                            }
+                                            value={price}
+                                            // defaultValue={newPrice ? (Number(newPrice) + Number(auction.price_step)).toFixed(2)
+                                            //                         : (Number(auction.end_price) + Number(auction.price_step)).toFixed(2)}
+                                            onChange={(e) => setPrice(e.target.value)}
+                                        >
+                                        </Form.Control>
+                                        <Button
+                                            onClick={makeOfferHandler}
+                                            className='btn-block inline'
+                                            variant='success'
+                                            disabled={
+                                                status ? status != getKeyByValue(STATUS, 'IN PROGRESS')
+                                                    : auction.auction_status != getKeyByValue(STATUS, 'IN PROGRESS')
+                                            }
+                                        >
+                                            Offer
+                                        </Button>
+                                    </Form.Group>
                                 </Col>
                             </Row>
                         </div>

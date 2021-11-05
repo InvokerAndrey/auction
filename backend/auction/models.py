@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.db import models
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
@@ -10,6 +9,8 @@ from .enums import AuctionTypeEnum, AuctionStatusEnum
 
 
 class Auction(models.Model):
+    # 10%
+    STEP = 0.1
     # Common (English and Dutch)
     type = models.IntegerField(
         choices=AuctionTypeEnum.choices(),
@@ -65,16 +66,18 @@ class Auction(models.Model):
 
     def save(self, *args, **kwargs):
         # 10% of start price
-        self.price_step = self.start_price * 0.1
+        self.price_step = self.start_price * self.STEP
         super().save(*args, **kwargs)
 
-    def send_updates(self, content):
+    def send_updates(self):
+        from .serializers import UpdateAuctionSerializer
+        serializer = UpdateAuctionSerializer(self, many=False)
         layer = get_channel_layer()
         async_to_sync(layer.group_send)(
             'auctions',
             {
                 'type': 'auctions.alarm', # Name of the method of Consumer that will handle the message
-                'content': content
+                'content': serializer.data
             }
         )
-        print('SENT:', content)
+        print('SENT:', serializer.data)
