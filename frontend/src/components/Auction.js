@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { STATUS, TYPE, getKeyByValue } from '../constants/auctionConstants'
+import { StatusEnum, TypeEnum } from '../constants/auctionConstants'
 
 
 function Auction({auction}) {
@@ -11,11 +11,11 @@ function Auction({auction}) {
             <Card.Body>
                 <Link to={`/auction/${auction.id}`}>
                     <Card.Title as="div">
-                        <strong>{TYPE[auction.type]}</strong> auction
+                        <strong>{TypeEnum.getVerboseById(auction.type)}</strong> auction
                     </Card.Title>
                 </Link>
                 <Card.Text as="div">
-                    <strong>{STATUS[auction.auction_status]}</strong><br/>
+                    <strong>{StatusEnum.getVerboseById(auction.auction_status)}</strong><br/>
                     Item: {auction.lot.item.title} <br />
                     Start price: ${auction.start_price} <br/>
                     Current price: ${auction.end_price} <br/>

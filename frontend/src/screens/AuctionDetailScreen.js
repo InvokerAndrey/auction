@@ -6,7 +6,7 @@ import AuctionService from '../services/AuctionService'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Timer from '../components/Timer'
-import { STATUS, TYPE, getKeyByValue } from '../constants/auctionConstants'
+import { StatusEnum, TypeEnum } from '../constants/auctionConstants'
 
 
 function AuctionDetailScreen({match, history}) {
@@ -23,9 +23,6 @@ function AuctionDetailScreen({match, history}) {
 
     socket.onmessage = (event) => {
         let data = JSON.parse(event.data);
-        console.log('From server:', data);
-        console.log('data.content.id:', data.content.id)
-        console.log('match.params.id:', match.params.id)
         if (data.content.id == match.params.id) {
             setStatus(data.content.auction_status)
             setNewPrice(data.content.end_price)
@@ -34,13 +31,7 @@ function AuctionDetailScreen({match, history}) {
         }
     }
 
-    console.log('status:', status)
-    console.log('newPrice:', newPrice)
-    console.log('closingDate:', closingDate)
-
     const auctionService = new AuctionService()
-
-
 
     const dispatch = useDispatch()
 
@@ -48,7 +39,7 @@ function AuctionDetailScreen({match, history}) {
     const {loading, auction, error} = auctionDetail
 
     const userLogin = useSelector(state => state.userLogin)
-    const { userInfo } = userLogin
+    const {userInfo} = userLogin
 
     const offerMake = useSelector(state => state.offerMake)
     const { laoding: loadingOffer, success: successOffer, error: errorOffer  } = offerMake
@@ -59,18 +50,15 @@ function AuctionDetailScreen({match, history}) {
 
     const makeOfferHandler = (e) => {
         e.preventDefault()
-        console.log('Making offer')
         dispatch(auctionService.makeOffer(match.params.id, {price}))
     }
      // Offer price
     const [price, setPrice] = useState(0)
-    console.log('set price', auction)
-    // const [price, setPrice] = useState("0.10")
-    console.log('price:', newPrice, auction)
+
     return (
         <div>
             <Button className="btn btn-dark my-3" onClick={() => history.goBack()}>
-                <i className="fas fa-arrow-circle-left"></i>
+                Back
             </Button>
             {loading ? <Loader />
                 : error ? <Message variant='danger'>{error}</Message>
@@ -83,10 +71,10 @@ function AuctionDetailScreen({match, history}) {
                                 <Col md={6}>
                                     <ListGroup variant="flush">
                                         <ListGroup.Item>
-                                            <h3>Type: {TYPE[auction.type]}</h3>
+                                            <h3>Type: {TypeEnum.getVerboseById(auction.type)}</h3>
                                         </ListGroup.Item>
                                         <ListGroup.Item>
-                                            <h3>Status: {status ? STATUS[status] : STATUS[auction.auction_status]}</h3>
+                                            <h3>Status: {status ? StatusEnum.getVerboseById(status) : StatusEnum.getVerboseById(auction.auction_status)}</h3>
                                         </ListGroup.Item>
                                         <ListGroup.Item>
                                             <h3>Start price: ${auction.start_price}</h3>
@@ -117,12 +105,13 @@ function AuctionDetailScreen({match, history}) {
                                     {errorOffer && <Message variant='danger'>{errorOffer.non_field_errors}</Message>}
                                     {successOffer && <Message variant='success'>Offer has been made</Message> }
                                     <Form.Group className='input-group'>
-                                        <InputGroup.Text><i className="fas fa-dollar-sign"></i></InputGroup.Text>
+                                        <InputGroup.Text>$</InputGroup.Text>
                                         <Form.Control
                                             type='number'
                                             disabled={
-                                                status ? status != getKeyByValue(STATUS, 'IN PROGRESS')
-                                                    : auction.auction_status != getKeyByValue(STATUS, 'IN PROGRESS')
+                                                status ? status != StatusEnum.IN_PROGRESS
+                                                    : auction.auction_status != StatusEnum.IN_PROGRESS
+                                                || !userInfo
                                             }
                                             value={price}
                                             // defaultValue={newPrice ? (Number(newPrice) + Number(auction.price_step)).toFixed(2)
@@ -135,8 +124,9 @@ function AuctionDetailScreen({match, history}) {
                                             className='btn-block inline'
                                             variant='success'
                                             disabled={
-                                                status ? status != getKeyByValue(STATUS, 'IN PROGRESS')
-                                                    : auction.auction_status != getKeyByValue(STATUS, 'IN PROGRESS')
+                                                status ? status != StatusEnum.IN_PROGRESS
+                                                    : auction.auction_status != StatusEnum.IN_PROGRESS
+                                                || !userInfo
                                             }
                                         >
                                             Offer

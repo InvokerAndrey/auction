@@ -7,7 +7,7 @@ import {
 
 
 export default class LotService {
-    BASE_URL = 'http://127.0.0.1:8000/api/lot/'
+    BASE_URL = 'api/lot/'
     LIST_URL = this.BASE_URL + 'list/'
 
     listLots = (params={}) => async (dispatch) => {

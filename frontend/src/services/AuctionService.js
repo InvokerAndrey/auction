@@ -17,7 +17,7 @@ import {
 
 
 export default class AuctionService {
-    BASE_URL = 'http://127.0.0.1:8000/api/auction/'
+    BASE_URL = 'api/auction/'
     LIST_URL = this.BASE_URL + 'list/'
 
     listAuctions = (params={}) => async (dispatch) => {
@@ -63,11 +63,9 @@ export default class AuctionService {
     makeOffer = (id, price) => async (dispatch, getState) => {
         try {
             dispatch({type: OFFER_MAKE_REQUEST})
-            console.log('123:', price)
             const {
                 userLogin: {userInfo}
             } = getState()
-            console.log('456:', userInfo)
             const config = {
                 headers: {
                     'Content-type': 'application/json',

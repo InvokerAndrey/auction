@@ -8,7 +8,7 @@ import {
 
 
 export default class UserService {
-    BASE_URL = 'http://127.0.0.1:8000/api/users/'
+    BASE_URL = 'api/users/'
     LOGIN_URL = this.BASE_URL + 'login/'
 
     login = (username, password) => async (dispatch) => {

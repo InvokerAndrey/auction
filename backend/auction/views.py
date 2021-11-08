@@ -2,6 +2,7 @@ from django.db.models import F, Q
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Auction
 from .serializers import AuctionSerializer
@@ -48,6 +49,7 @@ class CreateAuctionView(APIView):
 
 
 class MakeOffer(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request, pk, format=None):
         context = {
             'user': request.user,

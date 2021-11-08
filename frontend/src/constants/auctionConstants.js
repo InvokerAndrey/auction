@@ -6,17 +6,53 @@ export const AUCTION_DETAIL_REQUEST = 'AUCTION_DETAIL_REQUEST'
 export const AUCTION_DETAIL_SUCCESS = 'AUCTION_DETAIL_SUCCESS'
 export const AUCTION_DETAIL_FAIL = 'AUCTION_DETAIL_FAIL'
 
-export const STATUS = {
-    1: 'PENDING',
-    2: 'IN PROGRESS',
-    3: 'CLOSED',
+
+class Enum {
+    static obj = {}
+
+    static getVerboseById(id) {
+        for (let attr in this.obj) {
+            if (this.obj[attr].id === id) {
+                return this.obj[attr].verbose
+            }
+        }
+        return null
+    }
 }
 
-export const TYPE = {
-    1: 'ENGLISH',
-    2: 'DUTCH',
+
+export class StatusEnum extends Enum {
+    static obj = {
+        PENDING: {id: 1, verbose: 'pending...'},
+        IN_PROGRESS: {id: 2, verbose: 'in progress'},
+        CLOSED: {id: 3, verbose: 'closed'},
+    }
+
+    static get PENDING() {
+        return this.obj.PENDING.id
+    }
+
+    static get IN_PROGRESS() {
+        return this.obj.IN_PROGRESS.id
+    }
+
+    static get CLOSED() {
+        return this.obj.CLOSED.id
+    }
 }
 
-export function getKeyByValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value)
+
+export class TypeEnum extends Enum {
+    static obj = {
+        ENGLISH: {id: 1, verbose: 'TEA'},
+        DUTCH: {id: 2, verbose: 'WEED'},
+    }
+
+    static get ENGLISH() {
+        return this.obj.ENGLISH.id
+    }
+
+    static get DUTCH() {
+        return this.obj.DUTCH.id
+    }
 }
