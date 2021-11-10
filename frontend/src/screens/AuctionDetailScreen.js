@@ -6,6 +6,7 @@ import AuctionService from '../services/AuctionService'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Timer from '../components/Timer'
+import Offers from "../components/Offers";
 import { StatusEnum, TypeEnum } from '../constants/auctionConstants'
 
 
@@ -15,6 +16,7 @@ function AuctionDetailScreen({match, history}) {
     const [newPrice, setNewPrice] = useState(0)
     const [openingDate, setOpeningDate] = useState('')
     const [closingDate, setClosingDate] = useState('')
+    const [newOffers, setNewOffers] = useState(0)
 
     const socket = new WebSocket(`ws://localhost:8000/ws/auction/`);
     socket.onopen = (data) => {
@@ -23,11 +25,13 @@ function AuctionDetailScreen({match, history}) {
 
     socket.onmessage = (event) => {
         let data = JSON.parse(event.data);
+        console.log('From server:', data)
         if (data.content.id == match.params.id) {
             setStatus(data.content.auction_status)
             setNewPrice(data.content.end_price)
             setOpeningDate(data.content.opening_date)
             setClosingDate(data.content.closing_date)
+            setNewOffers(data.content.offers)
         }
     }
 
@@ -65,10 +69,18 @@ function AuctionDetailScreen({match, history}) {
                     : (
                         <div>
                             <Row>
-                                <Col md={6}>
+                                <Col md={4}>
                                     <Image src={auction.lot.item.photo} alt={auction.lot.item.title} fluid />
+                                    <ListGroup variant="flush">
+                                        <ListGroup.Item>
+                                            <h3>{auction.lot.item.title}</h3>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <h3>{auction.lot.item.description}</h3>
+                                        </ListGroup.Item>
+                                    </ListGroup>
                                 </Col>
-                                <Col md={6}>
+                                <Col md={5}>
                                     <ListGroup variant="flush">
                                         <ListGroup.Item>
                                             <h3>Type: {TypeEnum.getVerboseById(auction.type)}</h3>
@@ -94,44 +106,45 @@ function AuctionDetailScreen({match, history}) {
                                         <ListGroup.Item>
                                             <Timer time={ closingDate ? closingDate : auction.closing_date}/>
                                         </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <h3>Your offer:</h3>
+                                            {loadingOffer && <Loader />}
+                                            {errorOffer && <Message variant='danger'>{errorOffer.non_field_errors}</Message>}
+                                            {successOffer && <Message variant='success'>Offer has been made</Message> }
+                                            <Form.Group className='input-group'>
+                                                <InputGroup.Text>$</InputGroup.Text>
+                                                <Form.Control
+                                                    type='number'
+                                                    disabled={
+                                                        status ? status != StatusEnum.IN_PROGRESS
+                                                            : auction.auction_status != StatusEnum.IN_PROGRESS
+                                                        || !userInfo
+                                                    }
+                                                    value={price}
+                                                    // defaultValue={newPrice ? (Number(newPrice) + Number(auction.price_step)).toFixed(2)
+                                                    //                         : (Number(auction.end_price) + Number(auction.price_step)).toFixed(2)}
+                                                    onChange={(e) => setPrice(e.target.value)}
+                                                >
+                                                </Form.Control>
+                                                <Button
+                                                    onClick={makeOfferHandler}
+                                                    className='btn-block inline'
+                                                    variant='success'
+                                                    disabled={
+                                                        status ? status != StatusEnum.IN_PROGRESS
+                                                            : auction.auction_status != StatusEnum.IN_PROGRESS
+                                                        || !userInfo
+                                                    }
+                                                >
+                                                    Offer
+                                                </Button>
+                                            </Form.Group>
+                                        </ListGroup.Item>
                                     </ListGroup>
                                 </Col>
-                            </Row>
-                            <Row>
-                                <Col md={6}></Col>
-                                <Col className='flex-row'>
-                                    <h3>Your offer:</h3>
-                                    {loadingOffer && <Loader />}
-                                    {errorOffer && <Message variant='danger'>{errorOffer.non_field_errors}</Message>}
-                                    {successOffer && <Message variant='success'>Offer has been made</Message> }
-                                    <Form.Group className='input-group'>
-                                        <InputGroup.Text>$</InputGroup.Text>
-                                        <Form.Control
-                                            type='number'
-                                            disabled={
-                                                status ? status != StatusEnum.IN_PROGRESS
-                                                    : auction.auction_status != StatusEnum.IN_PROGRESS
-                                                || !userInfo
-                                            }
-                                            value={price}
-                                            // defaultValue={newPrice ? (Number(newPrice) + Number(auction.price_step)).toFixed(2)
-                                            //                         : (Number(auction.end_price) + Number(auction.price_step)).toFixed(2)}
-                                            onChange={(e) => setPrice(e.target.value)}
-                                        >
-                                        </Form.Control>
-                                        <Button
-                                            onClick={makeOfferHandler}
-                                            className='btn-block inline'
-                                            variant='success'
-                                            disabled={
-                                                status ? status != StatusEnum.IN_PROGRESS
-                                                    : auction.auction_status != StatusEnum.IN_PROGRESS
-                                                || !userInfo
-                                            }
-                                        >
-                                            Offer
-                                        </Button>
-                                    </Form.Group>
+                                <Col md={3}>
+                                    { newOffers ? <Offers id={match.params.id} newOffers={newOffers}/>
+                                        : <Offers id={match.params.id}/>}
                                 </Col>
                             </Row>
                         </div>

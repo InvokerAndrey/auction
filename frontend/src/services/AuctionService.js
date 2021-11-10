@@ -12,13 +12,19 @@ import {
 import {
     OFFER_MAKE_REQUEST,
     OFFER_MAKE_SUCCESS,
-    OFFER_MAKE_FAIL
+    OFFER_MAKE_FAIL,
+
+    OFFER_LIST_REQUEST,
+    OFFER_LIST_SUCCESS,
+    OFFER_LIST_FAIL
  } from '../constants/offerConstants'
 
 
 export default class AuctionService {
     BASE_URL = 'api/auction/'
     LIST_URL = this.BASE_URL + 'list/'
+    MAKE_OFFER_URL = 'make-offer/'
+    RECENT_OFFERS_URL = 'recent-offers/'
 
     listAuctions = (params={}) => async (dispatch) => {
         try {
@@ -74,7 +80,7 @@ export default class AuctionService {
             }
 
             const {data} = await axios.post(
-                this.BASE_URL + `${id}/make-offer/`,
+                this.BASE_URL + `${id}/` + this.MAKE_OFFER_URL,
                 price,
                 config
             )
@@ -83,6 +89,27 @@ export default class AuctionService {
         } catch (error) {
             dispatch({
                 type: OFFER_MAKE_FAIL,
+                payload: error.response && error.response.data.detail
+                    ? error.response.data.detail
+                        : error.message,
+            })
+        }
+    }
+
+
+    listRecentOffers = (id) => async (dispatch) => {
+        try {
+            dispatch({type: OFFER_LIST_REQUEST})
+
+            const {data} = await axios.get(this.BASE_URL + `${id}/` + this.RECENT_OFFERS_URL)
+
+            dispatch({
+                type: OFFER_LIST_SUCCESS,
+                payload: data,
+            })
+        } catch (error) {
+            dispatch({
+                type: OFFER_LIST_FAIL,
                 payload: error.response && error.response.data.detail
                     ? error.response.data.detail
                         : error.message,

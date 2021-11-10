@@ -9,7 +9,7 @@ from .serializers import AuctionSerializer
 from .enums import AuctionStatusEnum, AuctionTypeEnum
 from core.views import BaseDetailView
 from core.views import Pagination
-from offer.serializers import CreateOfferSerializer
+from offer.serializers import CreateOfferSerializer, OfferSerializer
 
 
 class AuctionListView(APIView):
@@ -55,9 +55,20 @@ class MakeOffer(APIView):
             'user': request.user,
             'auction_pk': pk
         }
+        print('request.data:', request.data)
         offer_serializer = CreateOfferSerializer(data=request.data, context=context)
         if offer_serializer.is_valid():
             offer_serializer.save()       
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response({'detail': offer_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AuctionRecentOffersView(APIView):
+    def get(self, request, pk, format=None):
+        """
+            Return last 5 offers
+        """
+        offer_qs = Auction.objects.get(pk=pk).offer_set.order_by('-pk')[:5]
+        serializer = OfferSerializer(offer_qs, many=True)
+        return Response(serializer.data)

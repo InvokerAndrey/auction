@@ -29,3 +29,4 @@ class AuctionConsumer(AsyncJsonWebsocketConsumer):
             }
         )
         print('SENT In auctions_alarm')
+

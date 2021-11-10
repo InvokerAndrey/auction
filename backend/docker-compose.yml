@@ -24,6 +24,7 @@ services:
     depends_on:
      - db
      - redis
+     - web
 
   web:
     build:
@@ -37,7 +38,6 @@ services:
     depends_on:
      - db
      - redis
-     - celery
     
     stdin_open: true
     tty: true

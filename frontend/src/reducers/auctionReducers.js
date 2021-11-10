@@ -11,7 +11,11 @@ import {
 import {
     OFFER_MAKE_REQUEST,
     OFFER_MAKE_SUCCESS,
-    OFFER_MAKE_FAIL
+    OFFER_MAKE_FAIL,
+
+    OFFER_LIST_REQUEST,
+    OFFER_LIST_SUCCESS,
+    OFFER_LIST_FAIL,
  } from '../constants/offerConstants'
 
 
@@ -64,6 +68,23 @@ import {
             return {loading: false, success: true}
 
         case OFFER_MAKE_FAIL:
+            return {loading: false, error: action.payload}
+
+        default:
+            return state
+    }
+}
+
+
+export const recentOfferListReducer = (state = {offers: []}, action) => {
+    switch(action.type) {
+        case OFFER_LIST_REQUEST:
+            return {loading: true, offers: []}
+
+        case OFFER_LIST_SUCCESS:
+            return {loading: false, offers: action.payload}
+
+        case OFFER_LIST_FAIL:
             return {loading: false, error: action.payload}
 
         default:

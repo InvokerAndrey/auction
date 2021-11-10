@@ -12,9 +12,14 @@ from auction.tasks import close_auction
 
 
 class OfferSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
+
+    def get_username(self, obj):
+        return obj.user.username
+
     class Meta:
         model = Offer
-        fields = ['id', 'auction', 'user', 'price', 'timestamp']
+        fields = ['id', 'auction', 'user', 'username', 'price', 'timestamp']
 
 
 class CreateOfferSerializer(serializers.Serializer):

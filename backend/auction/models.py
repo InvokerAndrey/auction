@@ -62,7 +62,7 @@ class Auction(models.Model):
     frequency = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f'Auction {self.pk}: {self.type}: start {self.opening_date.strftime(settings.DATETIME_FORMAT)}'
+        return f'Auction {self.pk}: {self.type}: start {self.opening_date}'
 
     def save(self, *args, **kwargs):
         # 10% of start price
@@ -81,3 +81,4 @@ class Auction(models.Model):
             }
         )
         print('SENT:', serializer.data)
+

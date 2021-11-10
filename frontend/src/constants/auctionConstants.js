@@ -12,7 +12,7 @@ class Enum {
 
     static getVerboseById(id) {
         for (let attr in this.obj) {
-            if (this.obj[attr].id === id) {
+            if (this.obj.hasOwnProperty(attr) && this.obj[attr].id === id) {
                 return this.obj[attr].verbose
             }
         }

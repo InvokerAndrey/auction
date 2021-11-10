@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'debug_toolbar',
-    'djmoney',
+    'djmoney.apps.MoneyConfig',
     'rest_framework_simplejwt',
     'channels',
     'corsheaders',
