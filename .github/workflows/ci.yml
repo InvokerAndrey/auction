@@ -59,6 +59,8 @@ jobs:
       run: |
         cd backend
         poetry install --no-root --no-interaction
+    - name: psycopg2 prerequisites
+      run: sudo apt-get install libpq-dev
     - name: Run Tests
       run: |
         cd backend
