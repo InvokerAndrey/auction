@@ -1,0 +1,52 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ develop, master ]
+  pull_request:
+    branches: [ develop, master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+     #----------------------------------------------
+     #  -----  install & configure poetry  -----
+     #----------------------------------------------
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+    #----------------------------------------------
+    #       load cached venv if cache exists
+    #----------------------------------------------
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v2
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+    #----------------------------------------------
+    # install dependencies if cache does not exist
+    #----------------------------------------------
+    - name: Install dependencies
+      run: |
+        cd backend
+        poetry install --no-root --no-interaction
+    - name: Run Tests
+      run: |
+        pytest
