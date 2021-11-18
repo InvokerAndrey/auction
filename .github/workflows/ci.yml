@@ -49,5 +49,4 @@ jobs:
         poetry install --no-root --no-interaction
     - name: Run Tests
       run: |
-        make command
-        pytest
+        poetry run pytest
