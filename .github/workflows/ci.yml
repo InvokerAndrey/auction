@@ -44,7 +44,9 @@ jobs:
     # install dependencies if cache does not exist
     #----------------------------------------------
     - name: Install dependencies
-      run: poetry install --project-file backend/pyproject.toml
+      run: |
+        cd backend
+        poetry install --no-root --no-interaction
     - name: Run Tests
       run: |
         pytest
