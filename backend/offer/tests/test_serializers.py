@@ -1,20 +1,22 @@
+from django.contrib.auth.models import User
 import pytest
 
-from offer.serializers import CreateOfferSerializer, OfferSerializer
-from offer.models import Offer
-from django.contrib.auth.models import User
-from auction.models import Auction
 from datetime import datetime
+
+from offer.serializers import CreateOfferSerializer
+from auction.models import Auction
+from auction.enums import AuctionStatusEnum
 
 
 @pytest.fixture()
 def user(db) -> User:
     return User.objects.create(username='admin', password='admin', is_staff=True)
 
+
 @pytest.fixture()
 def auction(db) -> Auction:
-    opening = datetime.fromtimestamp(1636463563.008701)#.strftime('%Y-%m-%d %H:%M:%S')
-    closing = datetime.fromtimestamp(1736463623.008701)#.strftime('%Y-%m-%d %H:%M:%S')
+    opening = datetime.fromtimestamp(1636463563.008701)
+    closing = datetime.fromtimestamp(1736463623.008701)
     return Auction.objects.create(
         type=1,
         start_price=1,
@@ -35,5 +37,25 @@ def test_create_offer_serializer(user, auction):
         'price': 2
     }
     serializer = CreateOfferSerializer(data=data, context=context)
-    print('zxc:', serializer.is_valid(), serializer.errors)
     assert serializer.is_valid()
+
+    auction.closing_date = datetime.fromtimestamp(1636463623.008701)
+    auction.save()
+    serializer = CreateOfferSerializer(data=data, context=context)
+    serializer.is_valid()
+    assert serializer.is_valid() is False
+    assert serializer.errors['non_field_errors'][0] == 'Not in time'
+
+    data['price'] = 1
+    auction.closing_date = datetime.fromtimestamp(1736463623.008701)
+    auction.save()
+    serializer = CreateOfferSerializer(data=data, context=context)
+    assert serializer.is_valid() is False
+    assert serializer.errors['non_field_errors'][0] == 'Invalid price'
+
+    data['price'] = 2
+    auction.auction_status = AuctionStatusEnum.CLOSED.value
+    auction.save()
+    serializer = CreateOfferSerializer(data=data, context=context)
+    assert serializer.is_valid() is False
+    assert serializer.errors['non_field_errors'][0] == 'Auction is CLOSED'

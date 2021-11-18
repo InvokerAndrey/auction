@@ -27,5 +27,6 @@ def test_update_auction_serializer(auction):
         'auction_status': 2,
         'end_price': '1.00',
         'opening_date': opening.strftime('%Y-%m-%d %H:%M:%S'),
-        'closing_date': closing.strftime('%Y-%m-%d %H:%M:%S')
+        'closing_date': closing.strftime('%Y-%m-%d %H:%M:%S'),
+        'offers': []
     }

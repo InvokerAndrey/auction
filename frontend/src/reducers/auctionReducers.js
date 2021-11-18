@@ -59,6 +59,7 @@ import {
     }
 }
 
+
  export const offerMakeReducer = (state = {}, action) => {
     switch(action.type) {
         case OFFER_MAKE_REQUEST:
@@ -85,6 +86,23 @@ export const recentOfferListReducer = (state = {offers: []}, action) => {
             return {loading: false, offers: action.payload}
 
         case OFFER_LIST_FAIL:
+            return {loading: false, error: action.payload}
+
+        default:
+            return state
+    }
+}
+
+
+ export const buyItNowReducer = (state = {}, action) => {
+    switch(action.type) {
+        case OFFER_MAKE_REQUEST:
+            return {loading: true, ...state};
+
+        case OFFER_MAKE_SUCCESS:
+            return {loading: false, success: true}
+
+        case OFFER_MAKE_FAIL:
             return {loading: false, error: action.payload}
 
         default:

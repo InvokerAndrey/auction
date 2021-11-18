@@ -20,7 +20,7 @@ services:
   celery:
     build:
       context: .
-    command: celery -A backend worker -B -l INFO
+    command: celery -A backend worker -l INFO
     depends_on:
      - db
      - redis

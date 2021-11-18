@@ -9,7 +9,8 @@ import ItemListScreen from './screens/ItemListScreen'
 import LotListScreen from './screens/LotListScreen'
 import AuctionListScreen from './screens/AuctionListScreen'
 import LoginScreen from './screens/LoginScreen'
-import AuctionDetailScreen from './screens/AuctionDetailScreen';
+import EnglishAuctionDetailScreen from './screens/EnglishAuctionDetailScreen';
+import DutchAuctionDetailScreen from './screens/DutchAuctionDetailScreen'
 
 
 function App() {
@@ -23,7 +24,8 @@ function App() {
           <Route path='/lots' component={LotListScreen} />
           <Route path='/auctions' component={AuctionListScreen} />
           <Route path='/login' component={LoginScreen} />
-          <Route path="/auction/:id" component={AuctionDetailScreen} />
+          <Route path="/english-auction/:id" component={EnglishAuctionDetailScreen} />
+          <Route path="/dutch-auction/:id" component={DutchAuctionDetailScreen} />
         </Container>
       </main>
       <Footer />

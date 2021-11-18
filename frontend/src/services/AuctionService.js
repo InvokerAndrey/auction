@@ -7,6 +7,10 @@ import {
     AUCTION_DETAIL_REQUEST,
     AUCTION_DETAIL_SUCCESS,
     AUCTION_DETAIL_FAIL,
+
+    AUCTION_BUY_IT_NOW_REQUEST,
+    AUCTION_BUY_IT_NOW_SUCCESS,
+    AUCTION_BUY_IT_NOW_FAIL,
  } from '../constants/auctionConstants'
 
 import {
@@ -25,6 +29,7 @@ export default class AuctionService {
     LIST_URL = this.BASE_URL + 'list/'
     MAKE_OFFER_URL = 'make-offer/'
     RECENT_OFFERS_URL = 'recent-offers/'
+    BUY_IT_NOW_URL = 'buy-it-now/'
 
     listAuctions = (params={}) => async (dispatch) => {
         try {
@@ -110,6 +115,38 @@ export default class AuctionService {
         } catch (error) {
             dispatch({
                 type: OFFER_LIST_FAIL,
+                payload: error.response && error.response.data.detail
+                    ? error.response.data.detail
+                        : error.message,
+            })
+        }
+    }
+
+    buyItNow = (id) => async (dispatch, getState) => {
+        try {
+            dispatch({type: AUCTION_BUY_IT_NOW_REQUEST})
+            const {
+                userLogin: {userInfo}
+            } = getState()
+            const config = {
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            }
+
+            const {data} = await axios.put(
+                this.BASE_URL + `${id}/` + this.BUY_IT_NOW_URL,
+                {},
+                config
+            )
+
+            dispatch({
+                type: AUCTION_BUY_IT_NOW_SUCCESS,
+            })
+        } catch (error) {
+            dispatch({
+                type: AUCTION_BUY_IT_NOW_FAIL,
                 payload: error.response && error.response.data.detail
                     ? error.response.data.detail
                         : error.message,

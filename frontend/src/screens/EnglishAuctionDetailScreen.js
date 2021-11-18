@@ -10,7 +10,7 @@ import Offers from "../components/Offers";
 import { StatusEnum, TypeEnum } from '../constants/auctionConstants'
 
 
-function AuctionDetailScreen({match, history}) {
+function EnglishAuctionDetailScreen({match, history}) {
 
     const [status, setStatus] = useState(0)
     const [newPrice, setNewPrice] = useState(0)
@@ -76,7 +76,7 @@ function AuctionDetailScreen({match, history}) {
                                             <h3>{auction.lot.item.title}</h3>
                                         </ListGroup.Item>
                                         <ListGroup.Item>
-                                            <h3>{auction.lot.item.description}</h3>
+                                            <h4>{auction.lot.item.description}</h4>
                                         </ListGroup.Item>
                                     </ListGroup>
                                 </Col>
@@ -104,7 +104,19 @@ function AuctionDetailScreen({match, history}) {
                                             <h3>Closing date: {closingDate ? closingDate : auction.closing_date}</h3>
                                         </ListGroup.Item>
                                         <ListGroup.Item>
-                                            <Timer time={ closingDate ? closingDate : auction.closing_date}/>
+                                            { status ?
+                                                (
+                                                    status == StatusEnum.IN_PROGRESS ?
+                                                        <Timer time={ closingDate ? closingDate : auction.closing_date}/>
+                                                        : ''
+                                                )
+                                                :
+                                                (
+                                                    auction.auction_status == StatusEnum.IN_PROGRESS ?
+                                                        <Timer time={ closingDate ? closingDate : auction.closing_date}/>
+                                                        : ''
+                                                )
+                                            }
                                         </ListGroup.Item>
                                         <ListGroup.Item>
                                             <h3>Your offer:</h3>
@@ -153,4 +165,4 @@ function AuctionDetailScreen({match, history}) {
     )
 }
 
-export default AuctionDetailScreen
+export default EnglishAuctionDetailScreen

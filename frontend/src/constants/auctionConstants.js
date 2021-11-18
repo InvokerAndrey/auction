@@ -6,6 +6,10 @@ export const AUCTION_DETAIL_REQUEST = 'AUCTION_DETAIL_REQUEST'
 export const AUCTION_DETAIL_SUCCESS = 'AUCTION_DETAIL_SUCCESS'
 export const AUCTION_DETAIL_FAIL = 'AUCTION_DETAIL_FAIL'
 
+export const AUCTION_BUY_IT_NOW_REQUEST = 'AUCTION_BUY_IT_NOW_REQUEST'
+export const AUCTION_BUY_IT_NOW_SUCCESS = 'AUCTION_BUY_IT_NOW_SUCCESS'
+export const AUCTION_BUY_IT_NOW_FAIL = 'AUCTION_BUY_IT_NOW_FAIL'
+
 
 class Enum {
     static obj = {}
@@ -17,6 +21,16 @@ class Enum {
             }
         }
         return null
+    }
+
+    static getIdList() {
+        let idList = []
+        for (let attr in this.obj) {
+            if (this.obj.hasOwnProperty(attr)) {
+                idList.push(this.obj[attr].id)
+            }
+        }
+        return idList
     }
 }
 

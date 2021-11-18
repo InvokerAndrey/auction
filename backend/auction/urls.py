@@ -10,6 +10,7 @@ urlpatterns = [
     path('<int:pk>/', views.AuctionDetailView.as_view(), name='auction-detail'),
     path('<int:pk>/make-offer/', views.MakeOffer.as_view(), name='make-offer'),
     path('<int:pk>/recent-offers/', views.AuctionRecentOffersView.as_view(), name='recent-offers'),
+    path('<int:pk>/buy-it-now/', views.BuyItNowView.as_view(), name='buy-it-now'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

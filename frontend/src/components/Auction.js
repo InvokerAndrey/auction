@@ -9,7 +9,7 @@ function Auction({auction}) {
         <Card className="my-3 p-3 rounded">
             <Card.Img src={auction.lot.item.photo} alt={auction.lot.item.title}/>
             <Card.Body>
-                <Link to={`/auction/${auction.id}`}>
+                <Link to={ auction.type === TypeEnum.ENGLISH ? `/english-auction/${auction.id}` : `/dutch-auction/${auction.id}`}>
                     <Card.Title as="div">
                         <strong>{TypeEnum.getVerboseById(auction.type)}</strong> auction
                     </Card.Title>

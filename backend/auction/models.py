@@ -48,6 +48,8 @@ class Auction(models.Model):
     )
     closing_date = models.DateTimeField(verbose_name='Closing date')
 
+    is_bought = models.BooleanField(default=False)
+
     # Dutch
     # minimum amount you are willing to sell for
     reserve_price = MoneyField(
@@ -66,7 +68,10 @@ class Auction(models.Model):
 
     def save(self, *args, **kwargs):
         # 10% of start price
-        self.price_step = self.start_price * self.STEP
+        if not self.price_step:
+            self.price_step = self.start_price * self.STEP
+        if not self.end_price:
+            self.end_price = self.start_price
         super().save(*args, **kwargs)
 
     def send_updates(self):

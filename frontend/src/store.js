@@ -15,6 +15,7 @@ import {
     auctionDetailReducer,
     offerMakeReducer,
     recentOfferListReducer,
+    buyItNowReducer,
 } from './reducers/auctionReducers'
 
 import { 
@@ -30,6 +31,7 @@ const reducer = combineReducers({
     auctionDetail: auctionDetailReducer,
     offerMake: offerMakeReducer,
     recentOfferList: recentOfferListReducer,
+    buyItNow: buyItNowReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ?

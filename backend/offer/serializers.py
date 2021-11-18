@@ -8,7 +8,7 @@ import datetime
 from .models import Offer
 from auction.enums import AuctionStatusEnum
 from auction.models import Auction
-from auction.tasks import close_auction
+from auction.tasks import close_english_auction
 
 
 class OfferSerializer(serializers.ModelSerializer):
@@ -30,11 +30,11 @@ class CreateOfferSerializer(serializers.Serializer):
         auction = Auction.objects.get(pk=self.context.get('auction_pk'))
 
         if not (auction.opening_date < timestamp < auction.closing_date):
-            raise serializers.ValidationError('You are too late (or early)')
+            raise serializers.ValidationError('Not in time')
         elif auction.end_price.amount > data['price'] or ((data['price'] - auction.price_step.amount) < auction.end_price.amount):
             raise serializers.ValidationError('Invalid price')
         elif auction.auction_status != AuctionStatusEnum.IN_PROGRESS.value:
-            raise serializers.ValidationError(f"Auction is {auction.auction_status}")
+            raise serializers.ValidationError(f"Auction is {AuctionStatusEnum.get_name_by_value(auction.auction_status)}")
         
         data['timestamp'] = timestamp
         time_gap = auction.closing_date - timezone.now()
@@ -51,7 +51,7 @@ class CreateOfferSerializer(serializers.Serializer):
         validated_data['user'] = self.context['user']
         offer = Offer.objects.create(**validated_data)
         if self.context.get('extend_time'):
-            transaction.on_commit(lambda: close_auction.apply_async((validated_data['auction'].pk, ),
+            transaction.on_commit(lambda: close_english_auction.apply_async((validated_data['auction'].pk, ),
                                                                    eta=validated_data['auction'].closing_date))
         transaction.on_commit(lambda: validated_data['auction'].send_updates())
         return offer
