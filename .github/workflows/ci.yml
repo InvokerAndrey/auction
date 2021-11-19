@@ -35,6 +35,11 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: psycopg2 prerequisites
       run: sudo apt-get install libpq-dev
+    - name: Install PostgreSQL client
+      run: |
+        apt-get update
+        apt-get install --yes postgresql-client
+
      #----------------------------------------------
      #  -----  install & configure poetry  -----
      #----------------------------------------------
