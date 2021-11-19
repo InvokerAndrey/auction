@@ -17,7 +17,7 @@ jobs:
         
     services:
       postgres:
-        image: postgres:10.8
+        image: postgres:11
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -35,11 +35,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: psycopg2 prerequisites
       run: sudo apt-get install libpq-dev
-    - name: Install PostgreSQL client
-      run: |
-        apt-get update
-        apt-get install --yes postgresql-client
-
      #----------------------------------------------
      #  -----  install & configure poetry  -----
      #----------------------------------------------
@@ -67,7 +62,6 @@ jobs:
         poetry install --no-root --no-interaction
     - name: Run migrations
       env:
-        DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
         POSTGRES_HOST: postgres
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
       run: |
@@ -75,7 +69,6 @@ jobs:
         poetry run python manage.py migrate
     - name: Run Tests
       env:
-          DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
           POSTGRES_HOST: postgres
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
       run: |
