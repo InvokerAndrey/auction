@@ -61,6 +61,8 @@ jobs:
         poetry install --no-root --no-interaction
     - name: psycopg2 prerequisites
       run: sudo apt-get install libpq-dev
+    - name: Run migrations
+      run: python manage.py migrate
     - name: Run Tests
       env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
