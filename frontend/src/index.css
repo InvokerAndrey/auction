@@ -15,3 +15,26 @@ code {
 main {
   min-height: 90vh;
 }
+
+.timer {
+
+  display: flex;
+  flex: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.timer div:first-child {
+  border: 1px solid #3fb618;
+  border-radius: 3px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-top: 1em;
+  padding: 1em;
+}
+
+.p-timer {
+  font-size: 2em;
+}

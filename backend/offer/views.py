@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 from core.views import BaseListView
 from .models import Offer
 from .serializers import OfferSerializer

@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import store from './store'
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './bootstrap.min.css'
+import axios from 'axios'
+
+
+axios.defaults.baseURL = 'http://127.0.0.1:8000/'
+
 
 ReactDOM.render(
   <Provider store={store}>

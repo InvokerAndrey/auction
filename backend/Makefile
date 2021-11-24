@@ -2,10 +2,10 @@ command:
 	docker run --rm backend_web
 	docker exec -ti backend_web_1 bash
 
-up web:
+up_web:
 	docker-compose up --build web
 
-up celery:
+up_celery:
 	docker-compose up --build celery
 
 celery:

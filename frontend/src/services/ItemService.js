@@ -7,7 +7,7 @@ import {
 
 
 export default class ItemService {
-    BASE_URL = '/api/item/'
+    BASE_URL = 'api/item/'
     LIST_URL = this.BASE_URL + 'list/'
 
     listItems = (params={}) => async (dispatch) => {

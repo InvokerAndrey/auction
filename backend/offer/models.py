@@ -19,4 +19,4 @@ class Offer(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Offer: {self.auction}, {self.user.username}'
+        return f'Offer {self.id}: {self.auction.id}, {self.user.username}, {self.price}'

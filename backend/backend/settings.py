@@ -31,7 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -45,8 +45,10 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'debug_toolbar',
-    'djmoney',
+    'djmoney.apps.MoneyConfig',
     'rest_framework_simplejwt',
+    'channels',
+    'corsheaders',
 
     'auction.apps.AuctionConfig',
     'item.apps.ItemConfig',
@@ -59,6 +61,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -88,6 +91,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+ASGI_APPLICATION = 'backend.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': ['redis://redis:6379']
+        }
+    }
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -114,6 +128,18 @@ DATABASES = {
     }
 }
 
+if os.environ.get('GITHUB_WORKFLOW'):
+    DATABASES = {
+        'default': {
+           'ENGINE': 'django.db.backends.postgresql',
+           'NAME': 'postgres',
+           'USER': 'postgres',
+           'PASSWORD': 'postgres',
+           'HOST': 'localhost',
+           'PORT': '5432',
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -139,15 +165,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
-
-DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 # Static files (CSS, JavaScript, Images)
@@ -172,6 +196,10 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 1,
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ]
 }
 
 # SimpleJWT
@@ -211,10 +239,22 @@ SIMPLE_JWT = {
 }
 
 # Celery
-CELERY_TIMEZONE = 'Europe/London'
+CELERY_TIMEZONE = 'Europe/Moscow'
 
 CELERY_BROKER_URL = 'redis://redis:6379'
 
 CELERY_ACCEPT_CONTENT = ['json']
 
 CELERY_TASK_SERIALIZER = 'json'
+
+# CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+
+# CELERY_TASK_ALWAYS_EAGER = True
+
+# EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+# EMAIL_HOST_USER = os.environ.get('EMAIL')
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')

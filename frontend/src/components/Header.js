@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import UserService from '../services/UserService'
+import Clock from './Clock'
+
 
 function Header() {
     const userService = new UserService()
@@ -54,6 +56,11 @@ function Header() {
                             <Nav.Link><i className="fa fa-user"></i>Login</Nav.Link>
                         </LinkContainer> 
                     )}
+                </Nav>
+                <Nav>
+                    <Nav.Item>
+                        <Clock />
+                    </Nav.Item>
                 </Nav>
                 </Navbar.Collapse>
             </Container>

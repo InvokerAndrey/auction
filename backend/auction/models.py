@@ -1,13 +1,16 @@
-from datetime import datetime
 from django.db import models
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
 from django.conf import settings
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 from .enums import AuctionTypeEnum, AuctionStatusEnum
 
 
 class Auction(models.Model):
+    # 10%
+    STEP = 0.1
     # Common (English and Dutch)
     type = models.IntegerField(
         choices=AuctionTypeEnum.choices(),
@@ -45,6 +48,8 @@ class Auction(models.Model):
     )
     closing_date = models.DateTimeField(verbose_name='Closing date')
 
+    is_bought = models.BooleanField(default=False)
+
     # Dutch
     # minimum amount you are willing to sell for
     reserve_price = MoneyField(
@@ -59,9 +64,26 @@ class Auction(models.Model):
     frequency = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f'Auction {self.pk}: {self.type}: start {self.opening_date.strftime(settings.DATETIME_FORMAT)}'
+        return f'Auction {self.pk}: {self.type}: start {self.opening_date}'
 
     def save(self, *args, **kwargs):
         # 10% of start price
-        self.price_step = self.start_price * 0.1
+        if not self.price_step:
+            self.price_step = self.start_price * self.STEP
+        if not self.end_price:
+            self.end_price = self.start_price
         super().save(*args, **kwargs)
+
+    def send_updates(self):
+        from .serializers import UpdateAuctionSerializer
+        serializer = UpdateAuctionSerializer(self, many=False)
+        layer = get_channel_layer()
+        async_to_sync(layer.group_send)(
+            'auctions',
+            {
+                'type': 'auctions.alarm', # Name of the method of Consumer that will handle the message
+                'content': serializer.data
+            }
+        )
+        print('SENT:', serializer.data)
+
