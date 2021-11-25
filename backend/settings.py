@@ -67,7 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
@@ -97,7 +97,8 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': ['redis://redis:6379']
+            # 'hosts': ['redis://redis:6379'],
+            'hosts': [os.environ.get('REDIS_URL', 'redis://redis:6379')],
         }
     }
 }
@@ -105,17 +106,6 @@ CHANNEL_LAYERS = {
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('AUCTION_DB_NAME'),
-#         'USER': os.environ.get('AUCTION_DB_USER'),
-#         'PASSWORD': os.environ.get('AUCTION_DB_PASSWORD'),
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -139,6 +129,12 @@ if os.environ.get('GITHUB_WORKFLOW'):
            'PORT': '5432',
         }
     }
+
+
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
 
 
 # Password validation
@@ -178,7 +174,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
@@ -241,7 +237,8 @@ SIMPLE_JWT = {
 # Celery
 CELERY_TIMEZONE = 'Europe/Moscow'
 
-CELERY_BROKER_URL = 'redis://redis:6379'
+# CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_BROKER_URL = os.environ.get('REDIS_URL')
 
 CELERY_ACCEPT_CONTENT = ['json']
 
@@ -250,11 +247,3 @@ CELERY_TASK_SERIALIZER = 'json'
 # CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
 
 # CELERY_TASK_ALWAYS_EAGER = True
-
-# EMAIL
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-# EMAIL_HOST_USER = os.environ.get('EMAIL')
-# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')

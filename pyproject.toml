@@ -23,6 +23,8 @@ django = "^3.2.8"
 channels = "^3.0.4"
 channels_redis = "^3.3.1"
 pytest-django = "^4.4.0"
+whitenoise = "^5.3.0"
+dj-database-url = "^0.5.0"
 
 [tool.poetry.dev-dependencies]
 
