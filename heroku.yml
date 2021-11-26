@@ -12,6 +12,5 @@ release:
     - python manage.py migrate
   image: web
 run:
-  web:
-    - python manage.py runsever
+  web: python manage.py runsever
 
