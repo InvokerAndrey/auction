@@ -2,10 +2,14 @@ setup:
   addons:
     - plan: heroku-postgresql
       as: DATABASE
+    - plan: heroku-redis
+      as: REDIS
 build:
   docker:
     web: Dockerfile
 release:
+  image: web
   command: python manage.py migrate
 run:
-  web: daphne backend.asgi:application --port $PORT --bind 0.0.0.0 -v2
+  web: python manage.py runsever
+
