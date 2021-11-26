@@ -8,8 +8,10 @@ build:
   docker:
     web: Dockerfile
 release:
-  image: web
-  command: python manage.py migrate
+  command:
+    - python manage.py migrate
+    image: web
 run:
-  web: python manage.py runsever
+  web:
+    - python manage.py runsever
 
