@@ -2,12 +2,6 @@ setup:
   addons:
     - plan: heroku-postgresql
       as: DATABASE
-  config:
-    DATABASE_URL: "postgres://hskfxloqebwhxm:06c1dbd1ec7ead9da1dda6b60869a0edfb800f28dbc673410890bdbc8f639509@ec2-52-208-145-55.eu-west-1.compute.amazonaws.com:5432/d4am379tu57qc3"
-    DJANGO_SETTINGS_MODULE: "backend.production_settings"
-    REDIS_TLS_URL: "rediss://:pdb206432e0e320fbf6a82af5efc719e7c8482f31ff390be821bfb6866bcc3409@ec2-18-203-2-155.eu-west-1.compute.amazonaws.com:8400"
-    REDIS_URL: "redis://:pdb206432e0e320fbf6a82af5efc719e7c8482f31ff390be821bfb6866bcc3409@ec2-18-203-2-155.eu-west-1.compute.amazonaws.com:8399"
-    DISABLE_COLLECTSTATIC: 1
 build:
   docker:
     web: Dockerfile
