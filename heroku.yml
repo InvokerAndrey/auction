@@ -10,7 +10,7 @@ build:
 release:
   command:
     - python manage.py migrate
-    image: web
+  image: web
 run:
   web:
     - python manage.py runsever
