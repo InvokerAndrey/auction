@@ -13,6 +13,6 @@ run:
     command:
       - daphne -b 0.0.0.0 -p $PORT backend.asgi:application
   worker:
-    comma
+    command:
       - celery -A backend worker -l INFO
     image: worker
