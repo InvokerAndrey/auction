@@ -11,9 +11,8 @@ build:
 run:
   web:
     command:
-      - python manage.py collectstatic
       - daphne -b 0.0.0.0 -p $PORT backend.asgi:application
   worker:
-    command:
+    comma
       - celery -A backend worker -l INFO
     image: worker
