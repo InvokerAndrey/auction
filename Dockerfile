@@ -17,3 +17,5 @@ COPY . /backend
 WORKDIR /backend
 
 EXPOSE 8000
+
+RUN mkdir static
