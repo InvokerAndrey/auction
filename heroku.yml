@@ -7,10 +7,7 @@ setup:
 build:
   docker:
     web: Dockerfile
-release:
-  command:
-    - python manage.py migrate
-  image: web
+
 run:
   web:
     command:
