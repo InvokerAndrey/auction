@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'debug_toolbar',
     'djmoney.apps.MoneyConfig',
     'rest_framework_simplejwt',
     'channels',
