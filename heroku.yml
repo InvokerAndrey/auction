@@ -7,8 +7,12 @@ setup:
 build:
   docker:
     web: Dockerfile
+    worker: Dockerfile
 run:
   web:
     command:
       - daphne -b 0.0.0.0 -p $PORT backend.asgi:application
+  worker:
+    command:
       - celery -A backend worker -l INFO
+    image: worker
