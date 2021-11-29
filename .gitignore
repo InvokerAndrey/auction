@@ -278,10 +278,10 @@ pip-selfcheck.json
 **/yarn-error.log*/**
 
 # static images
-/backend/static/images/*.png
-/backend/static/images/*.jpg
-/backend/static/images/*.jpeg
+#/backend/static/images/*.png
+#/backend/static/images/*.jpg
+#/backend/static/images/*.jpeg
 
-/static/images/*.png
-/static/images/*.jpg
-/static/images/*.jpeg
+images/*.png
+images/*.jpg
+images/*.jpeg
