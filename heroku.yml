@@ -9,9 +9,9 @@ build:
     web: Dockerfile
     celery: Dockerfile
 release:
-  web:
-    command:
-      - python manage.py collectstatic
+  image: web
+  command:
+    - python manage.py collectstatic
 run:
   web:
     command:
