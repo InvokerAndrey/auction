@@ -8,10 +8,6 @@ build:
   docker:
     web: Dockerfile
     celery: Dockerfile
-release:
-  image: web
-  command:
-    - python manage.py collectstatic
 run:
   web:
     command:
@@ -19,5 +15,9 @@ run:
     image: web
   celery:
     command:
-      - celery worker --app=backend.celery
+      - celery -A backend worker -l INFO
     image: celery
+release:
+  image: web
+  command:
+    - python manage.py collectstatic --noinput
