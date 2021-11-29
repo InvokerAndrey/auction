@@ -18,4 +18,6 @@ WORKDIR /backend
 
 EXPOSE 8000
 
+mkdir static
+
 CMD python manage.py collectstatic --no-input

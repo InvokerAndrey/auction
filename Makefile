@@ -1,6 +1,6 @@
 command:
-	docker run --rm backend_web
-	docker exec -ti backend_web_1 bash
+	docker run --rm auction-backend_web
+	docker exec -ti auction-backend_web_1 bash
 
 up_web:
 	docker-compose up --build web
