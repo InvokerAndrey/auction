@@ -282,6 +282,6 @@ pip-selfcheck.json
 #/backend/static/images/*.jpg
 #/backend/static/images/*.jpeg
 
-images/*.png
-images/*.jpg
-images/*.jpeg
+*.png
+*.jpg
+*.jpeg
