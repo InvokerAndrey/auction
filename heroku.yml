@@ -16,5 +16,5 @@ run:
   web: daphne -b 0.0.0.0 -p $PORT backend.asgi:application
   celery:
     command:
-      - celery worker --application:backend.celery
+      - celery -A backend worker -l INFO
     image: celery
