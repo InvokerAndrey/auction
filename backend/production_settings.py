@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'channels',
     'corsheaders',
-    'whitenoise.runserver_nostatic',
 
     'auction.apps.AuctionConfig',
     'item.apps.ItemConfig',
