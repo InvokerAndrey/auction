@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-
+import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'channels',
     'corsheaders',
+    'cloudinary_storage',
     'cloudinary',
 
     'auction.apps.AuctionConfig',
@@ -179,16 +180,20 @@ STATICFILES_DIRS = [
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-import cloudinary
-
-cloudinary.config(
-  cloud_name="hicl18kdd",
-  api_key="876195899135744",
-  api_secret="kVHVUeF0rMgYFR0vSIvAL2c_SN8"
-)
+# cloudinary.config(
+#   cloud_name="hicl18kdd",
+#   api_key="876195899135744",
+#   api_secret="kVHVUeF0rMgYFR0vSIvAL2c_SN8"
+# )
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'hicl18kdd',
+    'API_KEY': '876195899135744',
+    'API_SECRET': 'kVHVUeF0rMgYFR0vSIvAL2c_SN8'
+}
 
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Django Rest Framework
 
