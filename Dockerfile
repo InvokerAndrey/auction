@@ -19,3 +19,5 @@ WORKDIR /backend
 EXPOSE 8000
 
 CMD python manage.py collectstatic --noinput
+
+CMD celery -A backend worker -l INFO
