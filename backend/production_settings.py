@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 
-test = 'a'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -49,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'channels',
     'corsheaders',
+    'cloudinary',
 
     'auction.apps.AuctionConfig',
     'item.apps.ItemConfig',
@@ -178,6 +178,14 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+import cloudinary
+
+cloudinary.config(
+  cloud_name="hicl18kdd",
+  api_key="876195899135744",
+  api_secret="kVHVUeF0rMgYFR0vSIvAL2c_SN8"
+)
 
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'channels',
     'corsheaders',
+    'cloudinary',
 
     'auction.apps.AuctionConfig',
     'item.apps.ItemConfig',
@@ -100,7 +101,6 @@ CHANNEL_LAYERS = {
         }
     }
 }
-test = 'b'
 
 
 # Database
@@ -171,6 +171,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+import cloudinary
+
+cloudinary.config(
+  cloud_name="hicl18kdd",
+  api_key="876195899135744",
+  api_secret="kVHVUeF0rMgYFR0vSIvAL2c_SN8"
+)
 
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
