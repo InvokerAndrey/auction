@@ -277,11 +277,11 @@ pip-selfcheck.json
 **/yarn-debug.log*/**
 **/yarn-error.log*/**
 
-# static images
-#/backend/static/images/*.png
-#/backend/static/images/*.jpg
-#/backend/static/images/*.jpeg
+ static images
+/backend/static/images/*.png
+/backend/static/images/*.jpg
+/backend/static/images/*.jpeg
 
-*.png
-*.jpg
-*.jpeg
+images/*.png
+images/*.jpg
+images/*.jpeg
