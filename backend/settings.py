@@ -173,15 +173,19 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'hicl18kdd',
     'API_KEY': '876195899135744',
     'API_SECRET': 'kVHVUeF0rMgYFR0vSIvAL2c_SN8'
 }
-
+cloudinary.config(
+  cloud_name = "hicl18kdd",
+  api_key = "876195899135744",
+  api_secret = "kVHVUeF0rMgYFR0vSIvAL2c_SN8"
+)
 # CLOUDINARY_CLOUD_NAME = 'hicl18kdd'
 # CLOUDINARY_API_SECRET = 'kVHVUeF0rMgYFR0vSIvAL2c_SN8'
 # CLOUDINARY_API_KEY = '876195899135744'
