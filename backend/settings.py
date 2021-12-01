@@ -100,6 +100,7 @@ CHANNEL_LAYERS = {
         }
     }
 }
+test = 'b'
 
 
 # Database
