@@ -1,11 +1,9 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 
 class Item(models.Model):
-    photo = models.ImageField(
-        null=True, blank=True,
-        default='/placeholder.jpg'
-    )
+    photo = CloudinaryField('image')
     title = models.CharField(
         max_length=255,
         null=True,
