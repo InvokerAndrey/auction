@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'channels',
     'corsheaders',
+    'cloudinary_storage',
     'cloudinary',
 
     'auction.apps.AuctionConfig',
@@ -172,13 +173,20 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'hicl18kdd',
     'API_KEY': '876195899135744',
     'API_SECRET': 'kVHVUeF0rMgYFR0vSIvAL2c_SN8'
 }
-MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+# CLOUDINARY_CLOUD_NAME = 'hicl18kdd'
+# CLOUDINARY_API_SECRET = 'kVHVUeF0rMgYFR0vSIvAL2c_SN8'
+# CLOUDINARY_API_KEY = '876195899135744'
+#
+# CLOUDINARY_URL = f'cloudinary://{CLOUDINARY_API_KEY}:{CLOUDINARY_API_SECRET}@{CLOUDINARY_CLOUD_NAME}'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Django Rest Framework
