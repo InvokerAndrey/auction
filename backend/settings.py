@@ -157,17 +157,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 cloudinary.config(
-  cloud_name = "hicl18kdd",
-  api_key = "876195899135744",
-  api_secret = "kVHVUeF0rMgYFR0vSIvAL2c_SN8"
+  cloud_name="hicl18kdd",
+  api_key="876195899135744",
+  api_secret="kVHVUeF0rMgYFR0vSIvAL2c_SN8"
 )
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

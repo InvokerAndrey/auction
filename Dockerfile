@@ -15,7 +15,3 @@ RUN poetry install
 COPY . /backend
 
 WORKDIR /backend
-
-EXPOSE 8000
-
-#CMD python manage.py collectstatic --noinput

@@ -285,3 +285,5 @@ pip-selfcheck.json
 images/*.png
 images/*.jpg
 images/*.jpeg
+
+**/staticfiles/**
