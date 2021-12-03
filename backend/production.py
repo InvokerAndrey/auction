@@ -4,7 +4,8 @@ import dj_database_url
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://english-dutch-auction-api.herokuapp.com']
+# ALLOWED_HOSTS = ['https://english-dutch-auction-api.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = ['https://english-dutch-auction.herokuapp.com']
 
