@@ -78,5 +78,5 @@ jobs:
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
       run: |
         cd backend
-        poetry run pytest
+        poetry run pytest --ds=backend.settings.base
         
