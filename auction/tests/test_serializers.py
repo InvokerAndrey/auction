@@ -12,8 +12,7 @@ closing = datetime.fromtimestamp(1636463623.008701)
 def auction(db) -> Auction:
     return Auction.objects.create(
         type=1,
-        start_price=1,
-        end_price=1,
+        start_price=1.00,
         auction_status=2,
         opening_date=opening,
         closing_date=closing,
