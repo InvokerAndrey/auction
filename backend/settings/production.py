@@ -1,4 +1,5 @@
 from .base import *
+import dj_database_url
 
 
 DEBUG = False
@@ -6,6 +7,9 @@ DEBUG = False
 ALLOWED_HOSTS = ['https://english-dutch-auction-api.herokuapp.com/']
 
 CORS_ALLOWED_ORIGINS = ['https://english-dutch-auction.herokuapp.com/']
+
+# Configure database from DATABASE_URL
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
