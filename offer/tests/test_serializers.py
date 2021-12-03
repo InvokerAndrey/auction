@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.models import User
 import pytest
 
@@ -19,8 +21,7 @@ def auction(db) -> Auction:
     closing = datetime.fromtimestamp(1736463623.008701)
     return Auction.objects.create(
         type=1,
-        start_price=1,
-        end_price=1,
+        start_price=Decimal('1'),
         auction_status=2,
         opening_date=opening,
         closing_date=closing,

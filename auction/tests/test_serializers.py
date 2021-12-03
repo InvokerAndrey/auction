@@ -1,7 +1,10 @@
+from decimal import Decimal
+
 import pytest
 from auction.serializers import UpdateAuctionSerializer
 from auction.models import Auction
 from datetime import datetime
+    # Dutch
 
 
 opening = datetime.fromtimestamp(1636463563.008701)
@@ -12,7 +15,7 @@ closing = datetime.fromtimestamp(1636463623.008701)
 def auction(db) -> Auction:
     return Auction.objects.create(
         type=1,
-        start_price=1.00,
+        start_price=Decimal('1'),
         auction_status=2,
         opening_date=opening,
         closing_date=closing,

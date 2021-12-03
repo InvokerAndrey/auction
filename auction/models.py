@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
@@ -10,7 +12,7 @@ from .enums import AuctionTypeEnum, AuctionStatusEnum
 
 class Auction(models.Model):
     # 10%
-    STEP = 0.1
+    STEP = Decimal('0.1')
     # Common (English and Dutch)
     type = models.IntegerField(
         choices=AuctionTypeEnum.choices(),
