@@ -16,4 +16,4 @@ COPY . /backend
 
 WORKDIR /backend
 
-CMD python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput
