@@ -62,7 +62,7 @@ jobs:
         poetry install --no-root --no-interaction
     - name: Run migrations
       env:
-        POSTGRES_HOST: localhost
+        POSTGRES_HOST: postgres
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
       run: |
         poetry run python manage.py migrate
