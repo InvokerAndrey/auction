@@ -3,8 +3,9 @@ build:
     web: Dockerfile
     celery: Dockerfile
 release:
-  run:
-    web: python manage.py collectstatic --noinput
+  image: web
+  command:
+    - python manage.py collectstatic --noinput
 run:
   web: daphne -b 0.0.0.0 -p $PORT backend.asgi:application
   celery: celery -A backend worker -l INFO
