@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -26,11 +27,11 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = '^8m=8kqnvlu^0_e1%0a%(7(ksvf_q6rtxvq8$x$2er-v=2er-v=&k%(v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
 
 # Application definition
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'debug_toolbar',
     'djmoney.apps.MoneyConfig',
     'rest_framework_simplejwt',
     'channels',
@@ -97,7 +99,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [os.environ.get('REDIS_URL', 'redis://redis:6379')],
+            'hosts': os.environ.get('REDIS_URL'),
         }
     }
 }
@@ -109,31 +111,13 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
-
-if os.environ.get('GITHUB_WORKFLOW'):
-    DATABASES = {
-        'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'postgres',
-           'USER': 'postgres',
-           'PASSWORD': 'postgres',
-           'HOST': 'localhost',
-           'PORT': '5432',
-        }
-    }
-
-
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -172,21 +156,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    BASE_DIR / 'static'
+    BASE_DIR / 'static',
 ]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'hicl18kdd',
-    'API_KEY': '876195899135744',
-    'API_SECRET': 'kVHVUeF0rMgYFR0vSIvAL2c_SN8'
-}
+cloudinary.config(
+  cloud_name = "hicl18kdd",
+  api_key = "876195899135744",
+  api_secret = "kVHVUeF0rMgYFR0vSIvAL2c_SN8"
+)
+
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Django Rest Framework
@@ -247,3 +230,7 @@ CELERY_BROKER_URL = os.environ.get('REDIS_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 
 CELERY_TASK_SERIALIZER = 'json'
+
+# CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+
+# CELERY_TASK_ALWAYS_EAGER = True
