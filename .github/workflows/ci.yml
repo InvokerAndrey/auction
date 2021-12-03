@@ -68,7 +68,7 @@ jobs:
         poetry run python manage.py migrate --settings=backend.settings.base
     - name: Run Tests
       env:
-          POSTGRES_HOST: postgres
+          POSTGRES_HOST: localhost
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
       run: |
         cd backend
