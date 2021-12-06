@@ -77,6 +77,6 @@ jobs:
         POSTGRES_HOST: localhost
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
       run: |
-        cd backend
+        ls
         poetry run pytest --disable-warnings
         
