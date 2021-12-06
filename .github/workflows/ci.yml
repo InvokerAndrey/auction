@@ -68,7 +68,7 @@ jobs:
         POSTGRES_HOST: localhost
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
       run: |
-        poetry run python manage.py migrate --settings=backend.settings.base
+        poetry run python manage.py migrate --settings=backend.settings.development
     - name: Run Tests
       env:
         POSTGRES_USER: postgres
