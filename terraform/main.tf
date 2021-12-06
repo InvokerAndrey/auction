@@ -20,7 +20,7 @@ resource "heroku_app" "default" {
 
   config_vars = {
       DEBUG_COLLECTSTATIC = "1"
-      DJANGO_SETTINGS_MODULE = "backend.production"
+      DJANGO_SETTINGS_MODULE = "backend.settings.production"
   }
 
   buildpacks = [

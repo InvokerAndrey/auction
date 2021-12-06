@@ -1,4 +1,4 @@
-from .settings import *
+from .development import *
 import dj_database_url
 
 

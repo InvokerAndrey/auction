@@ -15,7 +15,7 @@ from channels.auth import AuthMiddlewareStack
 
 from auction.routing import websocket_urlpatterns
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings.development')
 django.setup()
 
 application = ProtocolTypeRouter({
